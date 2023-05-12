@@ -255,17 +255,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \providecaptionname{english}{\TransFurtherReadingTitle}{Further Reading}
-\providecaptionname{french}{\TransFurtherReadingTitle}{Weitere Literatur}
-
 \providecaptionname{english}{\TransFurtherReadingText}{%
     The following references were used in this work but not cited in the text body;
     they are provided here as\-/is.
 }
-\providecaptionname{french}{\TransFurtherReadingText}{%
-    Die folgenden Quellen wurden im Rahmen dieser Arbeit benutzt, jedoch nicht
-    explizit zitiert.
-    Sie sind hier der Vollständigkeit halber aufgeführt.
-}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Other
@@ -672,9 +666,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% label, e.g. 'Chapter', appearing before the chapter number:
-
-
 % \renewcommand*{\chapterformat}{%
 %     \color{g3}% g3 is a shade of grey
 %     %
@@ -693,6 +684,11 @@
 % *DH: Table of contents
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{mycolorchapheading}{RGB}{48, 62, 116}%
+\definecolor{mycolorsecheading}{RGB}{48, 62, 116}%
+\definecolor{mycolorhyperref}{HTML}{D95319}%
+\definecolor{mycolorbiblio}{HTML}{4DBEEE}%
+\definecolor{mycolorurl}{HTML}{7E2F8E}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Global TOC at beginning of document
@@ -711,9 +707,8 @@
 ]{loe}
 
 \addtokomafont{partentrypagenumber}{\nullfont} % remove the page number for the part headings from TOC
-\setcounter{tocdepth}{2} % list up to subsections in the TOC
+\setcounter{tocdepth}{1} % list up to subsections in the TOC
 \setcounter{secnumdepth}{\subsectionnumdepth} % subsubsection and lower (paragraph) unnumbered
-% \addtokomafont{chapterentry}{\normalcolor}% chapter names in tableofcontents in color of the text, not the one of the headings
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TOC at beginning of each chapter & part
@@ -752,6 +747,7 @@
 %   \setchapterpreamble{%
     \begin{minipage}{\linewidth}
       \hrulefill\par
+      \hypersetup{linkcolor=mycolorsecheading}
       \value{tocdepth}=\subsectiontocdepth% we want entries down to subsection
       \listoftoc*{\ext@chaptoc}% show the toc without header
     \end{minipage}%
@@ -787,7 +783,7 @@
 
 % >> Parts
 \setkomafont{partprefix}{\fontsize{40pt}{40pt}\selectfont\normalcolor}
-\setkomafont{part}{\fontsize{50pt}{50pt}\selectfont\color{darklink}}
+\setkomafont{part}{\fontsize{50pt}{50pt}\selectfont\color{mycolorchapheading}}
 
 % >> Chapters
 \newenvironment{chapterabstract}[1][\textwidth]{% Abstract to be printed at beginning of a chapter
@@ -808,21 +804,21 @@
 }
 
 \addtokomafont{chapterprefix}{\raggedleft}
-\addtokomafont{chapter}{\fontsize{30pt}{30pt}\selectfont\color{darklink}}
+\addtokomafont{chapter}{\fontsize{30pt}{30pt}\selectfont\color{mycolorchapheading}}
 \newkomafont{chapternumber}{\fontsize{50}{120}\selectfont\color{white}}
 \renewcommand\chapterformat{%
-  \raisebox{-6pt}{\colorbox{darklink}{%
+  \raisebox{-6pt}{\colorbox{mycolorchapheading}{%
       \parbox[c][60pt]{45pt}{\centering%
         \vfill{\usekomafont{chapternumber}{\thechapter\autodot}}%
         \vspace{6pt}%
 }}}\enskip}
 
 % >> Sections
-\addtokomafont{section}{\fontsize{14pt}{14pt}\selectfont\color{darklink}}
+\addtokomafont{section}{\fontsize{14pt}{14pt}\selectfont\color{mycolorsecheading}}
 \newkomafont{sectionnumber}{\fontsize{18pt}{18pt}\selectfont\rmfamily\color{white}}
 \renewcommand\sectionformat{%
   \setlength\fboxsep{5pt}%
-  \colorbox{darklink}{%
+  \colorbox{mycolorsecheading}{%
       \parbox{30pt}{\centering\usekomafont{sectionnumber}{\thesection\autodot}}}%
     \quad%
 }
@@ -838,8 +834,8 @@
 }
 
 % >> Subsections
-\addtokomafont{subsection}{\fontsize{12pt}{12pt}\selectfont\color{darklink}}
-\newkomafont{subsectionnumber}{\fontsize{16pt}{16pt}\selectfont\rmfamily\color{darklink}}
+\addtokomafont{subsection}{\fontsize{12pt}{12pt}\selectfont\color{mycolorsecheading}}
+\newkomafont{subsectionnumber}{\fontsize{16pt}{16pt}\selectfont\rmfamily\color{mycolorsecheading}}
 \renewcommand\subsectionformat{%
   \setlength\fboxsep{5pt}%
     % \centering\usekomafont{subsectionnumber}{\thesubsection\autodot}%
@@ -849,7 +845,7 @@
 }
 
 % >> Subsubsections
-\addtokomafont{subsubsection}{\selectfont\color{darklink}}
+\addtokomafont{subsubsection}{\selectfont\color{mycolorsecheading}}
 \renewcommand\subsubsectionformat{%
   \setlength\fboxsep{5pt}%
     \centering{\thesubsubsection\autodot}%
@@ -857,7 +853,7 @@
 }
 
 % >> Paragraphs
-\addtokomafont{paragraph}{\selectfont\color{darklink}}
+\addtokomafont{paragraph}{\selectfont\color{mycolorsecheading}}
 \renewcommand\paragraphformat{%
   \setlength\fboxsep{5pt}%
     \centering{\theparagraph\autodot}%
@@ -1244,10 +1240,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Bibliography
+% *Bibliography + DH
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% >> Resources used:
+% > https://tex.stackexchange.com/questions/253927/color-citation-using-biblatex-in-text-references-issue-with-postnote-bibl
+% > https://tex.stackexchange.com/questions/15951/hyperlink-name-with-biblatex-authoryear-biblatex-1-4b
+% > https://texdoc.org/serve/biblatex-philosophy/0
+% > https://tex.stackexchange.com/questions/12806/guidelines-for-customizing-biblatex-styles
+% > https://groups.google.com/g/comp.text.tex/c/rSPhG2jd3Ks
+% > 
 
 \RequirePackage[% Default back-end: biber
     % short style is 'alphabetic' (like [AB99]);
@@ -1256,6 +1259,9 @@
     autocite=footnote,% Control what \autocite does
     %
     sortcites=true,% Apply what is specified in sorting=
+    sorting=nyt,
+    bibstyle=authoryear,%numeric,
+    citestyle=authoryear,
     % Introduce back references in bibliography:
     % https://tex.stackexchange.com/a/211631/120853
     % Do not use hyperref for this
@@ -1263,7 +1269,94 @@
     url=false,% Still prints URL for @online, but nowhere else
     doi=false,%
     isbn=false,%
+    labelnumber
 ]{biblatex}%
+
+% > Number the citations in the biblio
+% > from https://tex.stackexchange.com/questions/470700/how-to-get-references-with-numbers-in-author-year-style-with-biblatex
+\DeclareNameAlias{sortname}{family-given}
+\DeclareFieldFormat{labelnumberwidth}{#1.}
+\defbibenvironment{bibliography}
+  {\list
+     {\printtext[labelnumberwidth]{%
+        \printfield{labelprefix}%
+        \printfield{labelnumber}}}
+     {\setlength{\labelwidth}{\labelnumberwidth}%
+      \setlength{\leftmargin}{\labelwidth}%
+      \setlength{\labelsep}{\biblabelsep}%
+      \addtolength{\leftmargin}{\labelsep}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}}%
+      \renewcommand*{\makelabel}[1]{\hss##1}}
+  {\endlist}
+  {\item}
+
+% \DeclareCiteCommand{\textcite}
+%   {\boolfalse{cbx:parens}}
+%   {\usebibmacro{citeindex}%
+%    \printtext[bibhyperref]{\usebibmacro{textcite}}}
+%   {\ifbool{cbx:parens}
+%      {\bibcloseparen\global\boolfalse{cbx:parens}}
+%      {}%
+%    \multicitedelim}
+%   {\usebibmacro{textcite:postnote}}
+
+%%% Attempts to modify color and info of citation in the text %%%  
+
+% \newcommand{\mkbibbracketscol}[1]{\textcolor{mPurple}{\mkbibbrackets{#1}}}
+% \DeclareCiteCommand{\parencite}[\mkbibbracketscol]
+%   {\usebibmacro{prenote}}
+%   {\usebibmacro{citeindex}%
+%   \printtext[bibhyperref]{\usebibmacro{cite}}}
+%   {\multicitedelim}
+%   {\usebibmacro{postnote}}
+
+% \DeclareCiteCommand{\textcite}
+%   {\usebibmacro{init}%
+%    \color{mPurple}}% change "red" to your desired color
+%   {\usebibmacro{textcite}}
+%   {\multicitedelim}
+%   {\usebibmacro{cite:dump}}
+
+\renewbibmacro*{textcite}{%
+  \ifnameundef{labelname}
+    {\iffieldundef{shorthand}
+       {\printtext[bibhyperref]{%
+          \usebibmacro{cite:label}}%
+        \setunit{%
+          \global\booltrue{cbx:parens}%
+          \printdelim{nonameyeardelim}\bibopenparen}%
+        \ifnumequal{\value{citecount}}{1}
+          {\usebibmacro{prenote}}
+          {}%
+        \printtext[bibhyperref]{\usebibmacro{cite:labeldate+extradate}}}
+       {\printtext[bibhyperref]{\usebibmacro{cite:shorthand}}}}
+    {\printtext[bibhyperref]{\printnames{labelname}}%
+     \setunit{%
+       \global\booltrue{cbx:parens}%
+       \printdelim{nameyeardelim}\bibopenparen}%
+     \ifnumequal{\value{citecount}}{1}
+       {\usebibmacro{prenote}}
+       {}%
+     \usebibmacro{citeyear}}}
+
+% \DeclareCiteCommand{\textcite}
+%   {\boolfalse{cbx:parens}%
+%   \usebibmacro{prenote}}
+%   {\usebibmacro{citeindex}%
+%   \printtext[bibhyperref]{\usebibmacro{textcite}}}
+%   {\ifbool{cbx:parens}
+%   {\bibrightparen\global\boolfalse{cbx:parens}}
+%   {}%
+%   \multicitedelim}
+%   {\iffieldundef{postnote}
+%   {\ifbool{cbx:parens}
+%   {\bibrightparen}
+%   {}}
+%   {\ifbool{cbx:parens}
+%   {\postnotedelim}
+%   {\addspace\bibleftparen}%
+%   \printfield{postnote}\bibrightparen}}
 
 % The `\addbibresource` command moved to the root *.tex file to work for VSCode's
 % LaTeX Workshop extension.
@@ -1566,16 +1659,25 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Hyperref and PDFs appearance
+% *Hyperref and PDFs appearance + DH
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% >> Resources used:
+% > https://tex.stackexchange.com/questions/253927/color-citation-using-biblatex-in-text-references-issue-with-postnote-bibl
+% > https://tex.stackexchange.com/questions/15951/hyperlink-name-with-biblatex-authoryear-biblatex-1-4b
+% > https://tex.stackexchange.com/questions/12806/guidelines-for-customizing-biblatex-styles
+% > https://groups.google.com/g/comp.text.tex/c/rSPhG2jd3Ks
+
 \RequirePackage[pdfusetitle]{hyperref}% Loads url-package internally
     \hypersetup{%
         % Unicode settings are automatically true for luatex engine,
         % don't specify manually
-        colorlinks=true,% No ugly frames, but still colored
-        allcolors=darklink,%
+        colorlinks=true,% No ugly frames around the reference, but still colored
+        allcolors=mycolorhyperref,%
+        citecolor=mycolorbiblio, % color of reference to biblio elements
+        linkcolor=mycolorhyperref, % color of reference to figures, tables, equation, etc. in the text
+        urlcolor=mycolorurl,
         % hidelinks,% Toggle here!
         plainpages=false,%
         pdfsubject={%
@@ -1603,6 +1705,7 @@
         pdfpagelayout=TwoPageRight,
         pdfdisplaydoctitle,% https://tex.stackexchange.com/a/435434/120853
     }%
+    \AfterTOCHead[toc]{\hypersetup{linkcolor=mycolorsecheading}}% use current color as linkcolor in TOC
 
     % In order to translate, polyglossia wraps things into \text<language>, e.g.
     % \textenglish. If this is part of a PDF string, like when we do
