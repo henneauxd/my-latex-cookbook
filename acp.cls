@@ -690,23 +690,123 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% *DH: Table of contents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Global TOC at beginning of document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dynamic width of number column in LoF/LoT etc (numsep + width of longest entry).
+% 'tocline' is the (dynamic) default style.
+\DeclareTOCStyleEntry[dynnumwidth=true]{tocline}{figure}
+\DeclareTOCStyleEntry[dynnumwidth=true]{tocline}{table}
+
+% Declare a new list of contents, with the file suffix in brackets.
+% This will give access to \listof<name>s
+\DeclareNewTOC[%
+    type=example,% This also creates types=example+s, that is by appending an s
+    % Listname is "List of <Type>s" by default, therefore translate:
+    listname={\TransListOfExamples{}},
+]{loe}
+
+\addtokomafont{partentrypagenumber}{\nullfont} % remove the page number for the part headings from TOC
+\setcounter{tocdepth}{2} % list up to subsections in the TOC
+\setcounter{secnumdepth}{\subsectionnumdepth} % subsubsection and lower (paragraph) unnumbered
+% \addtokomafont{chapterentry}{\normalcolor}% chapter names in tableofcontents in color of the text, not the one of the headings
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TOC at beginning of each chapter & part
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Resources used: 
+% > https://tex.stackexchange.com/questions/516093/replacement-minitoc-package-style-by-koma-script-possibilities
+
+% >> Parts
+\newif\ifuseparttoc
+\newcommand*{\parttoc}[1][\thepart]{% new command to generate and show a part toc
+  \useparttoctrue% switch on part-toc-entries
+  \edef\ext@parttoc{tcp#1}% extension of the part-toc-file, e.g., tcpI
+  \DeclareNewTOC[
+    listname=Obsah,
+    %unset=onecolumn% if the part toc should use twocolumn
+  ]{\ext@parttoc}% declare a new toc file
+  \begingroup
+    \value{tocdepth}=\chaptertocdepth% we want entries down to chapter
+    \listoftoc{\ext@parttoc}% show the toc with header
+  \endgroup
+}
+\xapptocmd\addtocentrydefault{% patch the KOMA-Script's generic toc entry generator
+  \ifuseparttoc% if part toc entries should be generated
+    \expandafter\tocbasic@addxcontentsline\expandafter{\ext@parttoc}{#1}{#2}{#3}% do it
+  \fi
+}{}{}
+
+% >> Chapters
+\xpretocmd\part{\useparttocfalse}{}{}% entries in part toc are automatically switched off at start of \part
+\newif\ifusechaptertoc% Switch to tell \addtocentrydefault to not only make entries to the toc-file but also to the current section-toc-file
+\newcommand*{\chaptertoc}[1][\thechapter]{% new command to generate and show a chapter toc
+  \usechaptertoctrue% switch on chapter-toc-entries
+  \edef\ext@chaptoc{tcc#1}% extension of the chapter-toc-file, e.g., tcc1
+  \DeclareNewTOC{\ext@chaptoc}% declare a new toc file
+  %\addsec*{Contents}% header of the chaptertoc
+%   \setchapterpreamble{%
+    \begin{minipage}{\linewidth}
+      \hrulefill\par
+      \value{tocdepth}=\subsectiontocdepth% we want entries down to subsection
+      \listoftoc*{\ext@chaptoc}% show the toc without header
+    \end{minipage}%
+    \par\bigskip\nobreak\noindent\hrulefill\par
+    \bigskip\noindent\ignorespaces% add some vertical space after the toc and do not indent the following text
+%   }%
+}
+\xapptocmd\addtocentrydefault{% patch the KOMA-Script's generic toc entry generator
+  \ifusechaptertoc% if chapter toc entries should be generated
+    \Ifstr{#1}{chapter}{}
+      {\expandafter\tocbasic@addxcontentsline\expandafter{\ext@chaptoc}{#1}{#2}{#3}}% do it
+  \fi
+}{}{}
+\xpretocmd\chapter{\usechaptertocfalse}{}{}% entries in chapter toc are automatically switched off at start of \chapter
+\xpretocmd\part{\usechaptertocfalse}{}{}% entries in chapter toc are automatically switched off at start of \part
+\newcommand\setchaptertoc[1][]{%
+  \Ifstr{#1}{}
+    {\AddtoOneTimeDoHook{heading/preinit/chapter}{\chaptertoc}}
+    {\AddtoOneTimeDoHook{heading/preinit/chapter}{\chaptertoc[#1]}}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % *DH: Sections, subsections, etc. formatting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Resources used:
 % > https://tex.stackexchange.com/questions/288737/customizing-chapter-and-section-style-scrbook
-% \RequirePackage{charter}
-% \RequirePackage[T1]{fontenc}
 
 % \setkomafont{section}{\normalfont\large\bfseries} % Set the font for section headings
 % \setkomafont{subsection}{\normalfont\large\itshape} % Set the font for subsection headings
 % \renewcommand{\thesection}{\Roman{section}} % Use Roman numerals for section numbers
 
-% \addtokomafont{chapterentry}{\normalcolor}% entrys in tableofcontents not blue
-
 % >> Parts
+\setkomafont{partprefix}{\fontsize{40pt}{40pt}\selectfont\normalcolor}
+\setkomafont{part}{\fontsize{50pt}{50pt}\selectfont\color{darklink}}
 
 % >> Chapters
+\newenvironment{chapterabstract}[1][\textwidth]{% Abstract to be printed at beginning of a chapter
+  \par\nobreak\noindent
+%   \textbf{\textit{Abstract}\hrulefill}
+  \par\nobreak
+  \begin{center}
+\begin{minipage}{0.9\textwidth}
+  \sffamily\small
+  \noindent\ignorespaces
+}{%
+\end{minipage}
+\end{center}
+  \par\nobreak\normalsize
+  \bigskip\noindent\ignorespaces
+%   \vskip-\ht\strutbox\noindent
+%   \textbf{\hrulefill}%
+}
+
 \addtokomafont{chapterprefix}{\raggedleft}
 \addtokomafont{chapter}{\fontsize{30pt}{30pt}\selectfont\color{darklink}}
 \newkomafont{chapternumber}{\fontsize{50}{120}\selectfont\color{white}}
@@ -742,13 +842,13 @@
 \newkomafont{subsectionnumber}{\fontsize{16pt}{16pt}\selectfont\rmfamily\color{darklink}}
 \renewcommand\subsectionformat{%
   \setlength\fboxsep{5pt}%
-    \centering\usekomafont{subsectionnumber}{\thesubsection\autodot}%
+    % \centering\usekomafont{subsectionnumber}{\thesubsection\autodot}%
+    \framebox{% Frame around the number of subsection
+      \parbox{30pt}{\centering\usekomafont{subsectionnumber}{\thesubsection\autodot}}}%
 \quad%
 }
 
-
 % >> Subsubsections
-\setcounter{secnumdepth}{\subsectionnumdepth} % subsubsection and lower (paragraph) unnumbered
 \addtokomafont{subsubsection}{\selectfont\color{darklink}}
 \renewcommand\subsubsectionformat{%
   \setlength\fboxsep{5pt}%
@@ -888,24 +988,6 @@
 }{
     % Else: nothing; faking a 'case' environment
 }%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tocbasic
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Dynamic width of number column in LoF/LoT etc (numsep + width of longest entry).
-% 'tocline' is the (dynamic) default style.
-\DeclareTOCStyleEntry[dynnumwidth=true]{tocline}{figure}
-\DeclareTOCStyleEntry[dynnumwidth=true]{tocline}{table}
-
-% Declare a new list of contents, with the file suffix in brackets.
-% This will give access to \listof<name>s
-\DeclareNewTOC[%
-    type=example,% This also creates types=example+s, that is by appending an s
-    % Listname is "List of <Type>s" by default, therefore translate:
-    listname={\TransListOfExamples{}},
-]{loe}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
