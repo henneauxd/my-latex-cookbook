@@ -220,8 +220,8 @@
 % SCRLayer
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\providecaptionname{english}{\TransBlankPage}{Rest of this page intentionally left blank.}
-\providecaptionname{french}{\TransBlankPage}{Rest der Seite absichtlich freigelassen.}
+\providecaptionname{english}{\TransBlankPage}{}
+\providecaptionname{french}{\TransBlankPage}{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Lists of ...
@@ -320,6 +320,7 @@
     \definecolor{MediumFluid}{RGB}{135, 178, 232}
     \definecolor{DarkFluid}{RGB}{119, 151, 197}
     \definecolor{HotFluid}{RGB}{255, 128, 128}% 255/128/128 is same as 'red!50'
+    \definecolor{DarkLinkGreen}{RGB}{65, 107, 60}
 
     % Dark blue link color:
     \definecolor{darklink}{RGB}{48, 62, 116}%
@@ -356,6 +357,13 @@
     \definecolor{cBlue}{RGB}{0, 130, 185}%
     \definecolor{cGreen}{RGB}{0, 128, 63}%
     \definecolor{cOrange}{RGB}{244, 131, 66}%
+
+    % *DH
+    \definecolor{mycolorchapheading}{RGB}{48, 62, 116}%
+    \definecolor{mycolorsecheading}{RGB}{48, 62, 116}%
+    \definecolor{mycolorhyperref}{HTML}{D95319}%
+    \definecolor{mycolorbiblio}{rgb}{0.09, 0.45, 0.27}
+    \definecolor{mycolorurl}{HTML}{7E2F8E}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Typeset code snippets
@@ -684,11 +692,6 @@
 % *DH: Table of contents
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\definecolor{mycolorchapheading}{RGB}{48, 62, 116}%
-\definecolor{mycolorsecheading}{RGB}{48, 62, 116}%
-\definecolor{mycolorhyperref}{HTML}{D95319}%
-\definecolor{mycolorbiblio}{HTML}{4DBEEE}%
-\definecolor{mycolorurl}{HTML}{7E2F8E}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Global TOC at beginning of document
@@ -782,7 +785,7 @@
 % \renewcommand{\thesection}{\Roman{section}} % Use Roman numerals for section numbers
 
 % >> Parts
-\setkomafont{partprefix}{\fontsize{40pt}{40pt}\selectfont\normalcolor}
+\setkomafont{partprefix}{\fontsize{35pt}{35pt}\selectfont\normalcolor}
 \setkomafont{part}{\fontsize{50pt}{50pt}\selectfont\color{mycolorchapheading}}
 
 % >> Chapters
@@ -987,8 +990,36 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% SCRLayer for page makeup (header/footer etc.)
+% *Page makeup: header/footer, etc. + DH
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DH: Text size and margins
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% >> Resources used:
+% > https://www.overleaf.com/learn/latex/Page_size_and_margins
+% > https://tex.stackexchange.com/questions/46175/setting-exact-margins
+
+% \usepackage{geometry}
+% \geometry{
+%  a4paper,
+% %  total={170mm,257mm},
+%  textwidth=165mm,
+%  textheight=240mm,
+%  left=23mm,
+%  top=23mm,
+%  }
+\usepackage[a4paper,
+            bindingoffset=0.0in, % To be set to different from zero (e.g. 0.2in) for printing!
+            left=1in,
+            right=1in,
+            top=1in,
+            bottom=1in,
+            footskip=.25in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Header/footer, etc.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \RequirePackage[automark]{scrlayer-scrpage}% Automatically mark
@@ -1239,6 +1270,14 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% *DH: Algorithms
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % *Bibliography + DH
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1272,24 +1311,24 @@
     labelnumber
 ]{biblatex}%
 
-% > Number the citations in the biblio
-% > from https://tex.stackexchange.com/questions/470700/how-to-get-references-with-numbers-in-author-year-style-with-biblatex
-\DeclareNameAlias{sortname}{family-given}
-\DeclareFieldFormat{labelnumberwidth}{#1.}
-\defbibenvironment{bibliography}
-  {\list
-     {\printtext[labelnumberwidth]{%
-        \printfield{labelprefix}%
-        \printfield{labelnumber}}}
-     {\setlength{\labelwidth}{\labelnumberwidth}%
-      \setlength{\leftmargin}{\labelwidth}%
-      \setlength{\labelsep}{\biblabelsep}%
-      \addtolength{\leftmargin}{\labelsep}%
-      \setlength{\itemsep}{\bibitemsep}%
-      \setlength{\parsep}{\bibparsep}}%
-      \renewcommand*{\makelabel}[1]{\hss##1}}
-  {\endlist}
-  {\item}
+% % > Number the citations in the biblio
+% % > from https://tex.stackexchange.com/questions/470700/how-to-get-references-with-numbers-in-author-year-style-with-biblatex
+% \DeclareNameAlias{sortname}{family-given}
+% \DeclareFieldFormat{labelnumberwidth}{#1.}
+% \defbibenvironment{bibliography}
+%   {\list
+%      {\printtext[labelnumberwidth]{%
+%         \printfield{labelprefix}%
+%         \printfield{labelnumber}}}
+%      {\setlength{\labelwidth}{\labelnumberwidth}%
+%       \setlength{\leftmargin}{\labelwidth}%
+%       \setlength{\labelsep}{\biblabelsep}%
+%       \addtolength{\leftmargin}{\labelsep}%
+%       \setlength{\itemsep}{\bibitemsep}%
+%       \setlength{\parsep}{\bibparsep}}%
+%       \renewcommand*{\makelabel}[1]{\hss##1}}
+%   {\endlist}
+%   {\item}
 
 % \DeclareCiteCommand{\textcite}
 %   {\boolfalse{cbx:parens}}
@@ -1706,7 +1745,6 @@
         pdfdisplaydoctitle,% https://tex.stackexchange.com/a/435434/120853
     }%
     \AfterTOCHead[toc]{\hypersetup{linkcolor=mycolorsecheading}}% use current color as linkcolor in TOC
-
     % In order to translate, polyglossia wraps things into \text<language>, e.g.
     % \textenglish. If this is part of a PDF string, like when we do
     % \addchap{\glossaryname}, LaTeX/hyperref will complain that \textenglish is not a
@@ -2588,8 +2626,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Only for the purpose of demonstration
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\definecolor{DarkLinkGreen}{RGB}{65, 107, 60}
 
 % Wrapper for links to CTAN, or elsewhere
 \newcommand*{\ctanpackage}[2][None]{%

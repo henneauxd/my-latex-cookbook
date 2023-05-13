@@ -1,8 +1,7 @@
 % No \cleardoubleoddpage shenanigans: the colophon page is supposed to be on the verso
 % behind the title.
-
+\newpage
 \thispagestyle{empty}
-\vspace*{\fill}
 
 \begingroup% Keep changes local to this group
     \hypersetup{hidelinks}
@@ -14,23 +13,23 @@
         l
     }
         % \TransXYZ commands are from translations file
-            Name &
-                \texttt{\textbf{%
-                    \jobname{}% Always print the job name
-                }}
-                    \makeatletter
-                        % Only print if censoring is on; command defined by kvoptions
-                        \ifacp@censoring%
-                            % This duplicate \textt\textbf is necessary.
-                            % This if construct cannot be inside the one font commands
-                            % for \jobname{}
-                            \texttt{\textbf{(\TransCensorNotice{})}}
-                        \fi
-                    \makeatother
+            Credits & \texttt{LaTeX Cookbook} written by Alex Povel, modified by the present author.
+                % \texttt{\textbf{%
+                %     \jobname{}% Always print the job name
+                % }}
+                    % \makeatletter
+                    %     % Only print if censoring is on; command defined by kvoptions
+                    %     \ifacp@censoring%
+                    %         % This duplicate \textt\textbf is necessary.
+                    %         % This if construct cannot be inside the one font commands
+                    %         % for \jobname{}
+                    %         \texttt{\textbf{(\TransCensorNotice{})}}
+                    %     \fi
+                    % \makeatother
                 \\
             \TransCompiledOn{} & \textbf{\DTMnow{}}\\
         \addlinespace
-            \faIcon{git-alt} & \texttt{\textbf{\GitShortSHA{}} (\GitRefName{})} \\
+            \faIcon{git-alt} & \url{https://github.com/henneauxd/my-latex-cookbook} \\ %\texttt{\textbf{\GitShortSHA{}} (\GitRefName{})} \\
         \addlinespace
             Engine & \prettybanner{}\\
             \LaTeX{} Version & \hologo{\fmtname} (\fmtversion)\\
@@ -39,4 +38,42 @@
             \TransGenerator{} & \texttt{latexmk}\\
             \TransLatexClass{} & \KOMAScriptVersion{}
     \end{tabular}%
+
+    \vspace*{\fill}
+    \begin{center}
+    \textcopyright Copyright by Author Name 2023. All Rights Reserved. 
+    \end{center}
 \endgroup%
+
+\newpage
+\begingroup% Keep changes local to this group
+\vspace{3.0\baselineskip}
+
+\noindent{\sffamily\bfseries Thesis Jury}\\
+\vspace{1.0\baselineskip}
+\begin{tabular}{lcr}
+Pr.~Name1 {\sffamily Surname1} & Co-supervisor & University/Department, Country\\
+Pr.~Name2 {\sffamily Surname2} & Co-supervisor  & University/Department, Country\\
+Pr.~Name3 {\sffamily Surname3} & Chair & University/Department, Country\\
+Pr.~Name4 {\sffamily Surname4} & Secretary & University/Department, Country\\
+Pr.~Name5 {\sffamily Surname5} & Examinator & University/Department, Country\\
+Pr.~Name6 {\sffamily Surname6} & Examinator & University/Department, Country\\
+\end{tabular}
+
+\vspace{5\baselineskip}
+
+\noindent{\sffamily\bfseries Funding}\\
+\vspace{1.0\baselineskip}
+\begin{center}
+    \begin{minipage}{0.8\textwidth}
+        {This research was financially supported by...
+        \vspace{0.5\baselineskip}
+        \noindent Computational resources have been provided by ...}
+    \end{minipage}
+\end{center}
+\endgroup
+
+
+
+
+
